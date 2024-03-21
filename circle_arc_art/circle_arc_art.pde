@@ -2,6 +2,7 @@ PGraphics canvas;
 
 import processing.serial.*;
 import java.util.*;
+import org.gicentre.handy.*;
 
 Serial port;    // Create an object from Serial class
 String val;     // Data received from the serial port
@@ -14,6 +15,8 @@ float rads_incr;
 float radius_offset;
 float rads_start_pt;
 PVector arc_orig;
+
+HandyRenderer h;
 
 color[][] colors_rgb_red  = {
   {255, 0, 0}, {255, 69, 0}, {255, 140, 0}, {255, 215, 0},
@@ -110,6 +113,10 @@ void settings() {
   fullScreen();
 }
 void setup() {
+  
+  h = new HandyRenderer(this);
+  h = HandyPresets.createWaterAndInk(this);
+  
   background(0);
   blendMode(REPLACE);
   // port = new Serial(this, "/dev/cu.usbmodem14201", 115200);
@@ -164,10 +171,12 @@ void draw_circles() {
 
       int randomColorFromArray = int(random(colors.length));
 
+      h.setIsHandy(false);
       fill(colors[randomColorFromArray][0], colors[randomColorFromArray][1], colors[randomColorFromArray][2]);
-      noStroke();
+      //noStroke();
       //rotate(random(0, 0.5));
-      ellipse(circle_center.x, circle_center.y, circle_diameter, circle_diameter * random(0.8, 1.2));
+      h.setIsHandy(true);
+      h.ellipse(circle_center.x, circle_center.y, circle_diameter, circle_diameter * random(0.8, 1.2));
       //rotate(0);
 
       noFill();
