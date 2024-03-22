@@ -90,7 +90,7 @@ color[][] all_colors = {
   {255, 140, 0}, {255, 69, 0}, {255, 192, 203}  // DarkOrange, Red-Orange, Pink
 };
 
-color[][] colors = {
+color[][] colors_standard = {
   {255, 0, 0}, {0, 255, 0}, {0, 0, 255}, // Primary Colors
   {255, 255, 0}, {255, 0, 255}, {0, 255, 255}, // Secondary Colors
   {255, 140, 0}, {255, 69, 0}, {255, 192, 203}, // Warm Tones
@@ -109,13 +109,16 @@ color[][] colors = {
   {255, 140, 0}, {255, 69, 0}, {255, 192, 203}, // DarkOrange, Red-Orange, Pink
 };
 
+color[][] colors = all_colors;
+
 void settings() {
   fullScreen();
 }
 void setup() {
   
-  h = new HandyRenderer(this);
+  //h = new HandyRenderer(this);
   h = HandyPresets.createWaterAndInk(this);
+  h.setOverrideStrokeColour(true);
   
   background(0);
   blendMode(REPLACE);
@@ -155,29 +158,41 @@ void draw() {
   //if ( port.available() > 0) { // If data is available,
   //  val = port.readStringUntil('\n');         // read it and store it in val
   //}
-  println(val); //print out in the console  
+  // println(val); //print out in the console  
 }
 
 void draw_circles() {
   for (int i = 1; i < displayWidth/squareSize; i = i+1) {
-    println(i);
     for (int j = 1; j < displayHeight/squareSize; j = j+1) {
-      print(j + " ");
       int posX = i * 100 + int(random(-25, 25));
       int posY = j * 100 + int(random(-25, 25));
       PVector circle_center = new PVector(posX, posY);
 
       float circle_diameter = random(squareSize - 50, squareSize + 50);
 
-      int randomColorFromArray = int(random(colors.length));
-
       h.setIsHandy(false);
+      int randomColorFromArray = int(random(colors.length));
       fill(colors[randomColorFromArray][0], colors[randomColorFromArray][1], colors[randomColorFromArray][2]);
-      //noStroke();
-      //rotate(random(0, 0.5));
       h.setIsHandy(true);
-      h.ellipse(circle_center.x, circle_center.y, circle_diameter, circle_diameter * random(0.8, 1.2));
-      //rotate(0);
+      
+      // stroke details
+      int randomStrokeColorFromArray = int(random(colors.length));
+      strokeWeight(random(1.5, 5.0));
+      h.setStrokeColour(color(colors[randomStrokeColorFromArray][0], colors[randomStrokeColorFromArray][1], colors[randomStrokeColorFromArray][2]));
+    
+      float randomRotate = random(0, TWO_PI);
+    
+      //pushMatrix();
+      //translate(circle_diameter / 2, circle_diameter / 2);
+      //rotate(randomRotate);
+      //translate(circle_center.x, circle_center.y);
+      h.ellipse(circle_center.x, circle_center.y, circle_diameter * random(0.8, 1.2), circle_diameter * random(0.8, 1.2));
+      //popMatrix();
+      
+      
+      
+      // TODO: rotate the entire object
+      
 
       noFill();
       arc_orig = circle_center;
@@ -235,7 +250,11 @@ void render_arc(PVector orig, float arc_len, float pts, float circle_diameter) {
   rads_start_pt = random(TWO_PI);
   radius = (circle_diameter/2)*random(1/10, 1);
 
-  translate(orig.x, orig.y);
+
+  float randomXOffset = random (0.5, 10);
+  float randomYOffset = random (0.5, 10);
+
+  translate(orig.x + randomXOffset, orig.y + randomYOffset);
   curveVertex(cos(rads_start_pt)*radius, sin(rads_start_pt)*radius);
   //curveVertex(radius, 0);
   for (int k=0; k<num_pts; k++) {
@@ -247,7 +266,7 @@ void render_arc(PVector orig, float arc_len, float pts, float circle_diameter) {
   }
   curveVertex(new_x, new_y);
   endShape();
-  translate(-orig.x, -orig.y);
+  translate(-(orig.x + randomXOffset), -(orig.y + randomYOffset));
 }
 
 void splat(float x, float y) {
