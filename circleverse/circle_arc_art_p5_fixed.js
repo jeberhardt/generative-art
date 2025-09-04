@@ -5,6 +5,14 @@ let squareSize = 100;
 // Controls the minimum and maximum random circle sizes
 let minCircleSize = 50;
 let maxCircleSize = 150;
+// Mobile device detection
+let isMobile = false;
+
+// Function to detect mobile devices
+function isMobileDevice() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+         window.innerWidth <= 768;
+}
 let num_pts = 47;
 let radius;
 let rads_incr;
@@ -289,6 +297,16 @@ function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent('canvasContainer');
   
+  // Detect if device is mobile
+  isMobile = isMobileDevice();
+  
+  // Adjust circle sizes and grid spacing for mobile devices
+  if (isMobile) {
+    squareSize = 60;  // Reduce grid spacing for mobile
+    minCircleSize = 20;  // Smaller minimum circle size for mobile
+    maxCircleSize = 80;  // Smaller maximum circle size for mobile
+  }
+  
   // Adjust canvas width based on control panel state
   const controlPanel = document.getElementById('controlPanel');
   if (!controlPanel.classList.contains('hidden')) {
@@ -319,6 +337,21 @@ function windowResized() {
   const controlPanel = document.getElementById('controlPanel');
   const canvasContainer = document.getElementById('canvasContainer');
   
+  // Re-detect if device is mobile (in case of orientation change)
+  isMobile = isMobileDevice();
+  
+  // Adjust circle sizes and grid spacing for mobile devices
+  if (isMobile) {
+    squareSize = 60;  // Reduce grid spacing for mobile
+    minCircleSize = 20;  // Smaller minimum circle size for mobile
+    maxCircleSize = 80;  // Smaller maximum circle size for mobile
+  } else {
+    // Reset to default values for desktop
+    squareSize = 100;
+    minCircleSize = 50;
+    maxCircleSize = 150;
+  }
+  
   if (controlPanel.classList.contains('hidden')) {
     resizeCanvas(windowWidth, windowHeight);
   } else {
@@ -346,6 +379,30 @@ function setupControlPanel() {
     colors = colorPalettes[selectedPalette];
     regenerateArt();
   });
+  
+  // Adjust slider ranges based on device type
+  const minSlider = document.getElementById('minCircleSize');
+  const maxSlider = document.getElementById('maxCircleSize');
+  
+  if (isMobile) {
+    // Set smaller ranges for mobile devices
+    minSlider.min = "5";
+    minSlider.max = "100";
+    minSlider.value = "20";
+    
+    maxSlider.min = "5";
+    maxSlider.max = "100";
+    maxSlider.value = "80";
+  } else {
+    // Set default ranges for desktop
+    minSlider.min = "10";
+    minSlider.max = "200";
+    minSlider.value = "50";
+    
+    maxSlider.min = "10";
+    maxSlider.max = "200";
+    maxSlider.value = "150";
+  }
   
   document.getElementById('minCircleSize').addEventListener('input', function() {
     minCircleSize = parseInt(this.value);
