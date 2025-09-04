@@ -302,7 +302,7 @@ function setup() {
   
   // Adjust circle sizes and grid spacing for mobile devices
   if (isMobile) {
-    squareSize = 60;  // Reduce grid spacing for mobile
+    squareSize = 60;  // Reduce grid spacing for mobile (increased from previous adjustment)
     minCircleSize = 20;  // Smaller minimum circle size for mobile
     maxCircleSize = 80;  // Smaller maximum circle size for mobile
   }
@@ -342,7 +342,7 @@ function windowResized() {
   
   // Adjust circle sizes and grid spacing for mobile devices
   if (isMobile) {
-    squareSize = 60;  // Reduce grid spacing for mobile
+    squareSize = 60;  // Reduce grid spacing for mobile (increased from previous adjustment)
     minCircleSize = 20;  // Smaller minimum circle size for mobile
     maxCircleSize = 80;  // Smaller maximum circle size for mobile
   } else {
@@ -556,8 +556,8 @@ function mouseDragged() {
 function draw_circles() {
   for (let i = 1; i < graphicsCanvas.width/squareSize; i++) {
     for (let j = 1; j < graphicsCanvas.height/squareSize; j++) {
-      let posX = i * 100 + floor(random(-25, 25));
-      let posY = j * 100 + floor(random(-25, 25));
+      let posX = i * squareSize + floor(random(-25, 25));
+      let posY = j * squareSize + floor(random(-25, 25));
       let circle_center = createVector(posX, posY);
       
       let circle_diameter = random(minCircleSize, maxCircleSize);
