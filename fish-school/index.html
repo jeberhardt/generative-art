@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fish School - Particle Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000011;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        #controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 50, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            z-index: 1000;
+        }
+        #controls label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        #controls input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        #controls button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #controls button:hover {
+            background-color: #004499;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <label for="schoolSize">School Size: <span id="sizeValue">50</span></label>
+        <input type="range" id="schoolSize" min="10" max="200" value="50">
+        <button id="resetBtn">Reset School</button>
+    </div>
+    <script src="sketch.js"></script>
+</body>
+</html>
