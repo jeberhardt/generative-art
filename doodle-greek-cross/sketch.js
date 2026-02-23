@@ -68,33 +68,30 @@ function draw() {
   pop();
 }
 
-// Cross/plus made from a polyomino outline
-function plusVertices(size, inset = 0) {
-  const u = (size / 3);
-  const r = u - inset;
-
+// Cross/plus made from a polyomino outline with asymmetric arm widths
+function plusVertices(size, armWidthTop, armWidthRight, armWidthBottom, armWidthLeft) {
+  // Each arm can have different width - creates asymmetric cross
+  // Gap between arms = size - armWidth
+  // For gap of 5-10px: armWidth = 90-95 (when size=100)
+  
   const pts = [
-    [-u, -3*u], [ u, -3*u], [ u, -u], [ 3*u, -u],
-    [ 3*u,  u], [ u,  u], [ u,  3*u], [-u,  3*u],
-    [-u,  u], [-3*u,  u], [-3*u, -u], [-u, -u]
+    [-armWidthLeft/2, -size],        // top-left of top arm
+    [ armWidthRight/2, -size],        // top-right of top arm
+    [ armWidthRight/2, -armWidthTop/2],    // inner corner TR
+    [ size, -armWidthTop/2],          // top-right of right arm
+    [ size, armWidthBottom/2],        // bottom-right of right arm
+    [ armWidthRight/2, armWidthBottom/2],   // inner corner BR
+    [ armWidthRight/2, size],         // bottom-right of bottom arm
+    [-armWidthLeft/2, size],          // bottom-left of bottom arm
+    [-armWidthLeft/2, armWidthBottom/2],   // inner corner BL
+    [-size, armWidthBottom/2],         // bottom-left of left arm
+    [-size, -armWidthTop/2],          // top-left of left arm
+    [-armWidthLeft/2, -armWidthTop/2]      // inner corner TL
   ];
 
   const out = [];
   for (const [x, y] of pts) {
-    let ix = x;
-    let iy = y;
-
-    if (x > 0) ix -= inset;
-    if (x < 0) ix += inset;
-    if (y > 0) iy -= inset;
-    if (y < 0) iy += inset;
-
-    out.push(createVector(ix, iy));
-  }
-
-  for (const v of out) {
-    if (abs(v.x) === 3*u - inset) v.x = (3*u - inset) * 0.985 * Math.sign(v.x);
-    if (abs(v.y) === 3*u - inset) v.y = (3*u - inset) * 0.985 * Math.sign(v.y);
+    out.push(createVector(x, y));
   }
 
   return out;
@@ -132,8 +129,14 @@ function drawHandDrawnGreekCross(x, y, size) {
   strokeCap(ROUND);
   noFill();
   
+  // Random arm widths between 90-95 to get gap of 5-10px for each direction
+  const armWidthTop    = random(90, 95);
+  const armWidthRight  = random(90, 95);
+  const armWidthBottom = random(90, 95);
+  const armWidthLeft   = random(90, 95);
+  
   // Draw Greek cross with noticeable wobble for irregularity
-  let cross = plusVertices(size, 0);
+  let cross = plusVertices(size, armWidthTop, armWidthRight, armWidthBottom, armWidthLeft);
   cross = wobble(cross, int(random(1e6)), 15);
   
   // Random pressure sensitivity - draw multiple passes with varying thickness
