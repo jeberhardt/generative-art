@@ -15,14 +15,16 @@ function setup() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+  redraw();
 }
 
 function draw() {
   background(paperCol);
 
-  // subtle paper grain
+  // subtle paper grain - scales with canvas size
   noStroke();
-  for (let i = 0; i < 25000; i++) {
+  const grainCount = (width * height) / 400;  // maintain consistent density
+  for (let i = 0; i < grainCount; i++) {
     const x = random(width), y = random(height);
     const a = random(6, 14);
     fill(255, 255, 255, a);
@@ -36,10 +38,11 @@ function draw() {
   translate(width/2, height/2);
   rotate(radians(rotationAngle));
   translate(-width/2, -height/2);
-
-  // All crosses are 100px (extent from center)
-  const size = 100;
-  const gap = 10;
+  
+  // Scale size based on canvas dimensions
+  const baseSize = min(width, height);
+  const size = baseSize * 0.12;  // Cross extent scales with canvas
+  const gap = size * 0.1;  // Gap also scales proportionally
   
   // A Greek cross with extent 'size' has total width = 2*size
   const spacingX = size * 2 + gap;
@@ -129,21 +132,21 @@ function drawHandDrawnGreekCross(x, y, size) {
   strokeCap(ROUND);
   noFill();
   
-  // Random arm widths between 90-95 to get gap of 5-10px for each direction
-  const armWidthTop    = random(90, 95);
-  const armWidthRight  = random(90, 95);
-  const armWidthBottom = random(90, 95);
-  const armWidthLeft   = random(90, 95);
+  // Random arm widths between 90-95% of size to get gap of 5-10%
+  const armWidthTop    = size * random(0.90, 0.95);
+  const armWidthRight  = size * random(0.90, 0.95);
+  const armWidthBottom = size * random(0.90, 0.95);
+  const armWidthLeft   = size * random(0.90, 0.95);
   
   // Draw Greek cross with noticeable wobble for irregularity
   let cross = plusVertices(size, armWidthTop, armWidthRight, armWidthBottom, armWidthLeft);
-  cross = wobble(cross, int(random(1e6)), 15);
+  cross = wobble(cross, int(random(1e6)), size * 0.15);
   
   // Random pressure sensitivity - draw multiple passes with varying thickness
   const pressurePasses = 3;
   for (let p = 0; p < pressurePasses; p++) {
-    // Random stroke weight per pass (1.5 to 4) to simulate pressure variation
-    const pressure = random(1.5, 4);
+    // Random stroke weight per pass to simulate pressure variation
+    const pressure = size * random(0.015, 0.04);
     stroke(red(inkCol), green(inkCol), blue(inkCol), 150 + random(50));
     strokeWeight(pressure);
     drawPoly(cross);
