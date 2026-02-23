@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Word Selector</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        #word {
+            font-size: 120px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="word">colour</div>
+
+    <script>
+        const words = ["colour", "shape", "movement", "interaction", "something else"];
+        let interval;
+        let isRunning = true;
+
+        function start() {
+            interval = setInterval(() => {
+                if (isRunning) {
+                    const randomIndex = Math.floor(Math.random() * words.length);
+                    document.getElementById('word').textContent = words[randomIndex];
+                }
+            }, 100); // Change every 100ms for very quick changes
+        }
+
+        start();
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (isRunning) {
+                    isRunning = false;
+                    clearInterval(interval);
+                } else {
+                    isRunning = true;
+                    start();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
