@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ribbon Tangle</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1814;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 100vh;
+    font-family: 'Courier New', monospace;
+    color: #c8b89a;
+  }
+  h1 {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-top: 14px;
+    padding: 0 20px;
+    opacity: 0.5;
+  }
+  canvas { display: block; }
+  #controls {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px 28px;
+    width: 100%;
+    padding: 0 20px;
+  }
+  .ctrl { display: flex; flex-direction: column; gap: 5px; }
+  label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    display: flex;
+    justify-content: space-between;
+  }
+  label span { opacity: 0.9; }
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 2px;
+    background: #3a342c;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #c8b89a;
+    cursor: pointer;
+  }
+  #buttons { margin-top: 18px; display: flex; gap: 12px; padding: 0 20px; }
+  button {
+    background: none;
+    border: 1px solid #3a342c;
+    color: #c8b89a;
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  button:hover { border-color: #c8b89a; }
+  #popover-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 24, 20, 0.85);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  #popover-overlay.open { display: flex; }
+  #popover-overlay img {
+    max-width: 90vw;
+    max-height: 90vh;
+    display: block;
+  }
+</style>
+</head>
+<body>
+<div id="sketch-container"></div>
+
+<div id="controls">
+  <div class="ctrl">
+    <label>Ribbons <span id="v-ribbons">11</span></label>
+    <input type="range" id="s-ribbons" min="3" max="24" step="1" value="11">
+  </div>
+
+  <div class="ctrl">
+    <label>Band Width <span id="v-width">14</span></label>
+    <input type="range" id="s-width" min="6" max="30" step="1" value="14">
+  </div>
+  <div class="ctrl">
+    <label>Roughness <span id="v-rough">1.8</span></label>
+    <input type="range" id="s-rough" min="0" max="5" step="0.1" value="1.8">
+  </div>
+
+</div>
+
+<div id="buttons">
+  <button id="btn-regen">Regenerate</button>
+  <button id="btn-save">Save PNG</button>
+  <button id="btn-doodle">Original</button>
+</div>
+
+<div id="popover-overlay">
+  <img src="doodle.jpg" alt="Original doodle">
+</div>
+<h1>Ribbon Tangle</h1>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<script src="sketch.js"></script>
+</body>
+</html>
