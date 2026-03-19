@@ -41,12 +41,12 @@ new p5(function(p) {
       const xBase = i * lineSpacing;
 
       const isAccent = p.random() < 0.06;
-      const baseAlpha = isAccent ? p.random(170, 220) : p.random(95, 160);
+      const baseAlpha = isAccent ? p.random(210, 255) : p.random(160, 220);
 
       const steps = 120;
       const yStep = p.height / steps;
       const inkLoadSeed = p.random(1000);
-      const inkLoadBase = p.random(0.6, 1.0);
+      const inkLoadBase = p.random(0.85, 1.0);
 
       // Wobble = slow drift + high-freq nib twitch
       const pts = [];
@@ -96,12 +96,12 @@ new p5(function(p) {
         const nibCatch = p.noise(i * 1.5 + nibCatchSeed, t * 45);
         const nibBulge = nibCatch > 0.72 ? (nibCatch - 0.72) * nibSide * 2.5 : 0;
 
-        const hwBase = p.map(pressure, 0, 1, 0.1, 1.1) * inkLoad * taperFactor;
+        const hwBase = p.map(pressure, 0, 1, 0.4, 1.8) * inkLoad * taperFactor;
         // Asymmetric: one side gets the bulge, the other stays clean
         const hwLeft  = hwBase + Math.max(0,  nibBulge);
         const hwRight = hwBase + Math.max(0, -nibBulge);
 
-        const sat = p.map(pressure, 0, 1, 0.55, 1.15) * inkLoad;
+        const sat = p.map(pressure, 0, 1, 0.8, 1.2) * inkLoad;
         const r = p.constrain(PEN[0] * sat, 10, 180);
         const g = p.constrain(PEN[1] * sat, 40, 210);
         const b = p.constrain(PEN[2] * sat, 80, 230);
