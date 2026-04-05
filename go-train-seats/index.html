@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Go Train Seats</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: transparent; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; font-family: monospace; }
+  canvas { display: block; }
+
+  #panel-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 20;
+    background: #111;
+    color: #f0f0f0;
+    border: 1px solid #777;
+    padding: 7px 14px;
+    cursor: pointer;
+    font-family: monospace;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    transition: background 0.15s, color 0.15s;
+  }
+  #panel-toggle:hover { background: #252525; color: #fff; }
+  #panel-toggle:focus-visible { outline: 2px solid #f0f0f0; outline-offset: 3px; }
+
+  #control-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100vh;
+    z-index: 10;
+    background: rgba(15, 15, 15, 0.93);
+    backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 80px 20px 20px;
+    transition: transform 0.25s ease;
+  }
+  #control-panel.hidden {
+    transform: translateX(-100%);
+  }
+
+  #control-panel button,
+  #control-panel a {
+    background: transparent;
+    color: #f0f0f0;
+    border: 1px solid #777;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-family: monospace;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    transition: background 0.15s, color 0.15s;
+    text-align: left;
+    text-decoration: none;
+    display: block;
+  }
+  #control-panel button:hover,
+  #control-panel a:hover { background: #252525; color: #fff; }
+  #control-panel button:focus-visible,
+  #control-panel a:focus-visible { outline: 2px solid #f0f0f0; outline-offset: 3px; }
+
+  #popover-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  #popover-overlay.open { display: flex; }
+  #popover-overlay img { max-width: 90vw; max-height: 90vh; display: block; }
+</style>
+</head>
+<body>
+
+<button id="panel-toggle">☰</button>
+
+<div id="control-panel" class="hidden">
+  <a href="../">← main menu</a>
+  <button id="save">↓ save</button>
+  <button id="original">original</button>
+</div>
+
+<div id="popover-overlay">
+  <img src="original.jpg" alt="Original doodle">
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<script src="../shared/download.js"></script>
+<script src="sketch.js"></script>
+<script>
+  const panel = document.getElementById('control-panel');
+  document.getElementById('panel-toggle').addEventListener('click', () => {
+    panel.classList.toggle('hidden');
+  });
+
+  document.getElementById('save').addEventListener('click', () => downloadCanvas('go-train-seats.png'));
+
+  const overlay = document.getElementById('popover-overlay');
+  document.getElementById('original').addEventListener('click', () => overlay.classList.add('open'));
+  overlay.addEventListener('click', () => overlay.classList.remove('open'));
+</script>
+</body>
+</html>
