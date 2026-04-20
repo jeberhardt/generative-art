@@ -112,6 +112,18 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  #popover-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  #popover-overlay.open { display: flex; }
+  #popover-overlay img { max-width: 90vw; max-height: 90vh; display: block; }
+
   #sketch-title {
     background: white;
     padding: 8px 18px;
@@ -136,11 +148,16 @@
   <a href="../">← main menu</a>
   <button id="regen">↻ regenerate</button>
   <button id="save">↓ save</button>
+  <button id="original">original</button>
   <select id="palette">
     <option value="classic">classic</option>
     <option value="high-energy">high energy</option>
     <option value="picasso-blue">picasso blue</option>
   </select>
+</div>
+
+<div id="popover-overlay">
+  <img src="doodle.jpg" alt="Original doodle">
 </div>
 
 <div id="loading-overlay">
@@ -163,6 +180,10 @@
   });
 
   document.getElementById('palette').addEventListener('change', () => generate());
+
+  const overlay = document.getElementById('popover-overlay');
+  document.getElementById('original').addEventListener('click', () => overlay.classList.add('open'));
+  overlay.addEventListener('click', () => overlay.classList.remove('open'));
 </script>
 </body>
 </html>
