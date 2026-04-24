@@ -5,7 +5,7 @@ new p5(function(p) {
   let linesPerSection = [];
   const ARC_STEPS = 80;
   const RADIAL_STEPS = 80;
-  const DURATION = 8;
+  const DURATION = 20;
 
   const SECTION_COLORS = [
     [26,  95, 180],
@@ -153,11 +153,11 @@ new p5(function(p) {
       let f = s / steps;
 
       // Slow path wobble
-      let pathNoise = p.noise(seed.rOff + f * 4.0, t * 0.15 + seed.tOff);
+      let pathNoise = p.noise(seed.rOff + f * 4.0, t * 0.06 + seed.tOff);
       let wobble = (pathNoise - 0.5) * 2.5 * seed.amp;
 
       // High-freq hand tremor jitter
-      let jitterNoise = p.noise(seed.jitterOff + f * 18.0, t * 0.3 + seed.tOff);
+      let jitterNoise = p.noise(seed.jitterOff + f * 18.0, t * 0.12 + seed.tOff);
       let jitter = (jitterNoise - 0.5) * 0.8;
 
       let { r, angle } = getAngleAtF(f, t);
@@ -167,11 +167,11 @@ new p5(function(p) {
 
       if (prevX !== null) {
         // Pressure: smooth thickness variation
-        let thickNoise = p.noise(seed.thickOff + f * 5.0, t * 0.1 + seed.tOff);
+        let thickNoise = p.noise(seed.thickOff + f * 5.0, t * 0.04 + seed.tOff);
         let thick = seed.baseThick * p.map(thickNoise, 0, 1, 0.55, 1.55);
 
         // Ink density: opacity variation
-        let alphaNoise = p.noise(seed.angOff + f * 6.0, t * 0.08 + seed.tOff);
+        let alphaNoise = p.noise(seed.angOff + f * 6.0, t * 0.032 + seed.tOff);
         let alpha = p.map(alphaNoise, 0, 1, alphaRange[0], alphaRange[1]);
 
         p.stroke(col[0], col[1], col[2], alpha);
@@ -191,7 +191,7 @@ new p5(function(p) {
     raw[0] = 0;
     for (let s = 1; s < driftSteps; s++) {
       let fPrev = (s - 1) / ARC_STEPS;
-      let nd = p.noise(seed.rOff + 88.3 + fPrev * 2.5, t * 0.11 + seed.tOff + 3.7);
+      let nd = p.noise(seed.rOff + 88.3 + fPrev * 2.5, t * 0.044 + seed.tOff + 3.7);
       raw[s] = raw[s - 1] + (nd - 0.5) * 0.6;
     }
     let driftScale = r * 0.055;
@@ -424,8 +424,8 @@ new p5(function(p) {
 
     // Gently drift the centerpoint using slow noise — wanders up to ~4% of canvas
     let driftAmt = Math.min(baseCX, baseCY) * 0.04;
-    CX = baseCX + (p.noise(t * 0.12, 0.0) - 0.5) * 2 * driftAmt;
-    CY = baseCY + (p.noise(0.0, t * 0.12 + 99.3) - 0.5) * 2 * driftAmt;
+    CX = baseCX + (p.noise(t * 0.05, 0.0) - 0.5) * 2 * driftAmt;
+    CY = baseCY + (p.noise(0.0, t * 0.05 + 99.3) - 0.5) * 2 * driftAmt;
 
     p.noFill();
     for (let i = 0; i < NUM_BOUNDS; i++) {
