@@ -154,6 +154,12 @@
     <option value="high-energy">high energy</option>
     <option value="picasso-blue">picasso blue</option>
   </select>
+  <select id="line-style">
+    <option value="clean">clean</option>
+    <option value="marker">marker</option>
+    <option value="sketchy">sketchy</option>
+    <option value="wavy">wavy</option>
+  </select>
 </div>
 
 <div id="popover-overlay">
@@ -167,6 +173,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
 <script src="../shared/download.js"></script>
 <script src="../shared/palettes.js"></script>
+<script src="../shared/line-styles.js"></script>
 <script>
   const loadingOverlay = document.getElementById('loading-overlay');
   function showLoading() { loadingOverlay.classList.add('active'); }
@@ -178,8 +185,6 @@
   document.getElementById('panel-toggle').addEventListener('click', () => {
     panel.classList.toggle('hidden');
   });
-
-  document.getElementById('palette').addEventListener('change', () => generate());
 
   const overlay = document.getElementById('popover-overlay');
   document.getElementById('original').addEventListener('click', () => overlay.classList.add('open'));
