@@ -101,6 +101,50 @@
   }
   #popover-overlay.open { display: flex; }
   #popover-overlay img { max-width: 90vw; max-height: 90vh; display: block; }
+
+  #tutorial-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 100;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 60px 20px;
+  }
+  #tutorial-overlay.open { display: flex; }
+  #tutorial-content {
+    background: #1a1a1a;
+    color: #e8e8e8;
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    line-height: 1.75;
+    max-width: 680px;
+    width: 100%;
+    padding: 48px 56px;
+  }
+  #tutorial-content h1 { font-size: 24px; font-weight: normal; margin-bottom: 8px; color: #fff; }
+  #tutorial-content h2 { font-size: 14px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: normal; color: #888; margin: 40px 0 16px; font-family: monospace; }
+  #tutorial-content p { margin-bottom: 16px; }
+  #tutorial-content pre { background: #111; padding: 20px; overflow-x: auto; margin: 20px 0; }
+  #tutorial-content code { font-family: monospace; font-size: 13px; color: #c8e6c9; }
+  #tutorial-content pre code { color: #c8e6c9; }
+  #tutorial-content hr { border: none; border-top: 1px solid #333; margin: 36px 0; }
+  #tutorial-close {
+    position: sticky;
+    top: 0;
+    float: right;
+    margin: -12px -12px 0 0;
+    background: transparent;
+    border: none;
+    color: #888;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px 8px;
+  }
+  #tutorial-close:hover { color: #fff; }
 </style>
 </head>
 <body>
@@ -112,6 +156,7 @@
   <button id="regen">↻ regenerate</button>
   <button id="save">↓ save</button>
   <button id="original">original</button>
+  <button id="tutorial">tutorial</button>
 </div>
 
 <div id="loading-overlay">
@@ -122,6 +167,13 @@
   <img src="original.jpg" alt="Original doodle">
 </div>
 
+<div id="tutorial-overlay">
+  <div id="tutorial-content">
+    <button id="tutorial-close">✕</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
 <script src="../shared/download.js"></script>
 <script>
@@ -139,6 +191,27 @@
   const overlay = document.getElementById('popover-overlay');
   document.getElementById('original').addEventListener('click', () => overlay.classList.add('open'));
   overlay.addEventListener('click', () => overlay.classList.remove('open'));
+
+  const tutorialOverlay = document.getElementById('tutorial-overlay');
+  const tutorialContent = document.getElementById('tutorial-content');
+  let tutorialLoaded = false;
+
+  document.getElementById('tutorial').addEventListener('click', async () => {
+    if (!tutorialLoaded) {
+      const res = await fetch('tutorial.md');
+      const md = await res.text();
+      const closeBtn = tutorialContent.querySelector('#tutorial-close');
+      tutorialContent.innerHTML = marked.parse(md);
+      tutorialContent.prepend(closeBtn);
+      tutorialLoaded = true;
+    }
+    tutorialOverlay.classList.add('open');
+  });
+
+  document.getElementById('tutorial-close').addEventListener('click', () => tutorialOverlay.classList.remove('open'));
+  tutorialOverlay.addEventListener('click', (e) => {
+    if (e.target === tutorialOverlay) tutorialOverlay.classList.remove('open');
+  });
 </script>
 </body>
 </html>
